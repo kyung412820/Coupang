@@ -48,20 +48,3 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
-
-// Querydsl Q클래스 자동 생성 설정
-tasks.withType(JavaCompile).configureEach {
-    options.annotationProcessorGeneratedSourcesDirectory = file("src/main/generated")
-}
-
-sourceSets {
-    main {
-        java {
-            srcDirs += "src/main/generated"
-        }
-    }
-}
-
-clean {
-    delete file("src/main/generated")
-}
