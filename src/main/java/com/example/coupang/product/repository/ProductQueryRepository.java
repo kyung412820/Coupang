@@ -4,6 +4,7 @@ import static com.example.coupang.product.entity.QProduct.product;
 import static com.example.coupang.user.entity.QUser.user;
 import static org.springframework.util.StringUtils.hasText;
 
+import com.example.coupang.common.RestPage;
 import com.example.coupang.product.dto.response.ProductResponseDto;
 import com.example.coupang.product.dto.response.QProductResponseDto;
 import com.querydsl.core.BooleanBuilder;
@@ -24,7 +25,7 @@ public class ProductQueryRepository {
     private final EntityManager em;
     private final JPAQueryFactory queryFactory;
 
-    public Page<ProductResponseDto> getProducts(Pageable pageable, String title) {
+    public RestPage<ProductResponseDto> getProducts(Pageable pageable, String title) {
 
         BooleanBuilder builder = new BooleanBuilder();
         if(hasText(title)) {
@@ -49,6 +50,9 @@ public class ProductQueryRepository {
             .from(product)
             .where(builder);
 
-        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
+        Page<ProductResponseDto> page = PageableExecutionUtils.getPage(content, pageable,
+            countQuery::fetchOne);
+
+        return new RestPage<>(page);
     }
 }
