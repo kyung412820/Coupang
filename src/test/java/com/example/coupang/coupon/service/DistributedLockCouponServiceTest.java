@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-public class CouponServiceTest {
+public class DistributedLockCouponServiceTest {
 
     @Autowired
     private DistributedLockCouponService distributedLockCouponService;
@@ -31,15 +31,31 @@ public class CouponServiceTest {
 
     @BeforeEach
     public void setUp() {
-
         // 쿠폰 수 초기화 (Redis에 저장된 coupon_count를 0으로 설정)
         redisTemplate.opsForValue().set("coupon_count", 0L);
 
         // 유저 데이터 초기화
-        dummyUsers = userRepository.findAll();
-        if (dummyUsers.isEmpty()) {
-            throw new IllegalStateException("유저 리스트가 비어 있습니다. 유저를 먼저 추가해주세요.");
+        initializeDummyUsers(); // 유저 데이터 추가 메서드 호출
+    }
+
+    // 더미 유저 데이터 초기화 메서드
+    private void initializeDummyUsers() {
+        // 유저 리스트가 비어있으면 UserRepository를 통해 유저 데이터를 추가
+        if (dummyUsers == null || dummyUsers.isEmpty()) {
+            dummyUsers = userRepository.findAll();  // 이미 생성된 유저 목록 가져오기
+            if (dummyUsers.isEmpty()) {
+                // 유저가 없다면 더미 유저 200명 생성
+                for (int i = 1; i <= 200; i++) {
+                    User user = new User("User" + i, "user" + i + "@example.com", "password" + i);
+                    userRepository.save(user); // 유저 저장
+                }
+                // 새로 생성된 유저 목록을 가져오기
+                dummyUsers = userRepository.findAll();
+            }
+            assertFalse(dummyUsers.isEmpty(), "유저 리스트가 비어 있습니다. 유저를 먼저 추가해주세요.");
         }
+        // 유저 데이터 초기화 완료 로그
+        System.out.println("유저 데이터 초기화 완료, 총 " + dummyUsers.size() + "명의 유저가 준비되었습니다.");
     }
 
     @Test
