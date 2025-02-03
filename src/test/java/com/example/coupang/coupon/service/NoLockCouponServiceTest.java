@@ -1,5 +1,6 @@
 package com.example.coupang.coupon.service;
 
+import com.example.coupang.exception.CouponLimitExceededException;
 import com.example.coupang.user.entity.User;
 import com.example.coupang.user.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -88,13 +89,23 @@ public class NoLockCouponServiceTest {
 
         // 쿠폰 수가 100이 아닐 경우 RuntimeException 발생
         if (couponCount != 100L) {
-            System.out.println("발급된 쿠폰 수: " + couponCount); // 발급된 쿠폰 수 출력
+            // 최대 쿠폰 수량 출력
+            System.out.println("최대 쿠폰 수량: 100개");
+            // 발급된 쿠폰 수 출력
+            System.out.println("발급된 쿠폰 수: " + couponCount);
+
             // 여기에서 예외 발생 시 테스트 성공 처리
-            assertThrows(RuntimeException.class, () -> {
-                throw new RuntimeException("쿠폰 수가 100이 아닙니다. 현재 쿠폰 수: " + couponCount);
+            RuntimeException exception = assertThrows(CouponLimitExceededException.class, () -> {
+                throw new CouponLimitExceededException("쿠폰 발행 수가 100이 아닙니다.");
             });
+
+            // 예외 메시지 출력
+            System.out.println(exception.getMessage());
         } else {
-            System.out.println("발급된 쿠폰 수: " + couponCount); // 발급된 쿠폰 수 출력
+            // 최대 쿠폰 수량 출력
+            System.out.println("최대 쿠폰 수량: 100개");
+            // 발급된 쿠폰 수 출력
+            System.out.println("발급된 쿠폰 수: " + couponCount);
         }
     }
 }
