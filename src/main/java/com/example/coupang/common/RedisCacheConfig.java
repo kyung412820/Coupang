@@ -26,7 +26,7 @@ public class RedisCacheConfig {
             // Value 저장 시 Json 직렬화
             .serializeValuesWith(
                 RedisSerializationContext.SerializationPair.fromSerializer(
-                new Jackson2JsonRedisSerializer<>(Object.class)))
+                new Jackson2JsonRedisSerializer<>(RestPage.class)))
             .entryTtl(Duration.ofMinutes(30L));
 
         return RedisCacheManager

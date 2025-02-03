@@ -1,11 +1,9 @@
 package com.example.coupang.product.controller;
 
+import com.example.coupang.common.RestPage;
 import com.example.coupang.product.dto.response.ProductResponseDto;
 import com.example.coupang.product.service.ProductService;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,7 +24,7 @@ public class ProductController {
     }
 
     @GetMapping("/v1/list")
-    public ResponseEntity<Page<ProductResponseDto>> getProductsV1(
+    public ResponseEntity<RestPage<ProductResponseDto>> getProductsV1(
         @RequestParam(defaultValue = "1") Integer page,
         @RequestParam(defaultValue = "10") Integer size,
         @RequestParam(required = false) String title) {
@@ -34,7 +32,7 @@ public class ProductController {
     }
 
     @GetMapping("/v2/list")
-    public ResponseEntity<List<ProductResponseDto>> getProductsV2(
+    public ResponseEntity<RestPage<ProductResponseDto>> getProductsV2(
         @RequestParam(defaultValue = "1") Integer page,
         @RequestParam(defaultValue = "10") Integer size,
         @RequestParam(required = false) String title) {
