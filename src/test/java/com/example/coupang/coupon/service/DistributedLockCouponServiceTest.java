@@ -4,10 +4,10 @@ import com.example.coupang.user.entity.User;
 import com.example.coupang.user.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -90,6 +90,8 @@ public class DistributedLockCouponServiceTest {
                             "Test Coupon", 20L, "AVAILABLE", LocalDateTime.now().plusWeeks(1)
                     );
                 } catch (Exception e) {
+                    // 예외 발생 시 처리
+                    System.out.println("발급 실패: " + e.getMessage());
                 } finally {
                     latch.countDown();  // 스레드 종료 후 latch 카운트 감소
                 }

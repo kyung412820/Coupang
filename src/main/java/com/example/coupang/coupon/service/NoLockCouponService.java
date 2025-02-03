@@ -3,6 +3,7 @@ package com.example.coupang.coupon.service;
 import com.example.coupang.coupon.entity.Coupon;
 import com.example.coupang.coupon.repository.CouponRepository;
 import com.example.coupang.coupon.dto.CouponResponseDto;
+import com.example.coupang.exception.CustomException;
 import com.example.coupang.user.entity.User;
 import com.example.coupang.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -48,7 +49,7 @@ public class NoLockCouponService {
 
         if (couponCount >= MAX_COUPON_COUNT) {
             // 쿠폰 수량이 100개 초과하면 더 이상 발급 불가
-            throw new RuntimeException("쿠폰이 모두 소진되었습니다.");
+            throw new CustomException.CouponLimitExceededException("쿠폰이 모두 소진되었습니다.");
         }
 
         // 유저 데이터 초기화

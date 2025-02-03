@@ -3,6 +3,7 @@ package com.example.coupang.coupon.controller;
 import com.example.coupang.coupon.dto.CouponRequestDto;
 import com.example.coupang.coupon.dto.CouponResponseDto;
 import com.example.coupang.coupon.service.DistributedLockCouponService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,14 +11,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/coupons")
 public class CouponController {
 
     private final DistributedLockCouponService distributedLockCouponService;
-
-    public CouponController(DistributedLockCouponService distributedLockCouponService) {
-        this.distributedLockCouponService = distributedLockCouponService;
-    }
 
     /**
      * 쿠폰 발급 메서드

@@ -1,6 +1,6 @@
 package com.example.coupang.coupon.service;
 
-import com.example.coupang.exception.CouponLimitExceededException;
+import com.example.coupang.exception.CustomException;
 import com.example.coupang.user.entity.User;
 import com.example.coupang.user.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -95,8 +95,8 @@ public class NoLockCouponServiceTest {
             System.out.println("발급된 쿠폰 수: " + couponCount);
 
             // 여기에서 예외 발생 시 테스트 성공 처리
-            RuntimeException exception = assertThrows(CouponLimitExceededException.class, () -> {
-                throw new CouponLimitExceededException("쿠폰 발행 수가 100이 아닙니다.");
+            RuntimeException exception = assertThrows(CustomException.CouponLimitExceededException.class, () -> {
+                throw new CustomException.CouponLimitExceededException("쿠폰 발행 수가 100이 아닙니다.");
             });
 
             // 예외 메시지 출력
