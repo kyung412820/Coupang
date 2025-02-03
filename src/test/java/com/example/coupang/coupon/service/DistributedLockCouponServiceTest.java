@@ -75,32 +75,6 @@ public class DistributedLockCouponServiceTest {
     }
 
     @Test
-    public void 동시성_이슈_검증() throws InterruptedException {
-        int numberOfThreads = 200;
-        CountDownLatch latch = new CountDownLatch(numberOfThreads);
-
-        for (int i = 0; i < numberOfThreads; i++) {
-            new Thread(() -> {
-                try {
-                    distributedLockCouponService.issueCoupon(
-                            "Test Coupon", 20L, "AVAILABLE", LocalDateTime.now().plusWeeks(1)
-                    );
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                } finally {
-                    latch.countDown();
-                }
-            }).start();
-        }
-
-        latch.await(1, TimeUnit.MINUTES);
-
-        Long couponCount = redisTemplate.opsForValue().get("coupon_count");
-        assertEquals(100L, couponCount);  // 쿠폰 수가 100이어야 한다
-        System.out.println("발급된 쿠폰 수: " + couponCount);
-    }
-
-    @Test
     public void 동시성_이슈_제어_성공() throws InterruptedException {
         // 200명의 유저가 동시에 쿠폰을 요청하는 상황을 시뮬레이션
         int numberOfThreads = 200;
