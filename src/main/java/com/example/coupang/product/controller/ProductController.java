@@ -24,10 +24,18 @@ public class ProductController {
     }
 
     @GetMapping("/v1/list")
-    public ResponseEntity<Page<ProductResponseDto>> getProducts(
+    public ResponseEntity<Page<ProductResponseDto>> getProductsV1(
         @RequestParam(defaultValue = "1") Integer page,
         @RequestParam(defaultValue = "10") Integer size,
         @RequestParam(required = false) String title) {
-        return ResponseEntity.ok(productService.getProducts(page, size, title));
+        return ResponseEntity.ok(productService.getProductsV1(page, size, title));
+    }
+
+    @GetMapping("/v2/list")
+    public ResponseEntity<Page<ProductResponseDto>> getProductsV2(
+        @RequestParam(defaultValue = "1") Integer page,
+        @RequestParam(defaultValue = "10") Integer size,
+        @RequestParam(required = false) String title) {
+        return ResponseEntity.ok(productService.getProductsV2(page, size, title));
     }
 }

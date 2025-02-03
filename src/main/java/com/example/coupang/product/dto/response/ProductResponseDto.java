@@ -2,10 +2,11 @@ package com.example.coupang.product.dto.response;
 
 import com.example.coupang.product.entity.Product;
 import com.querydsl.core.annotations.QueryProjection;
+import java.io.Serializable;
 import lombok.Getter;
 
 @Getter
-public class ProductResponseDto {
+public class ProductResponseDto implements Serializable {
 
     private final Long id;
     private final String productName;

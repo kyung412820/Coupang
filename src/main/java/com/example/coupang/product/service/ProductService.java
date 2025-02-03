@@ -7,5 +7,8 @@ public interface ProductService {
 
     ProductResponseDto getProductById(Long id);
 
-    Page<ProductResponseDto> getProducts(Integer page, Integer size, String title);
+    Page<ProductResponseDto> getProductsV1(Integer page, Integer size, String title);
+
+    Page<ProductResponseDto> getProductsV2(Integer page, Integer size, String title);
+
 }
