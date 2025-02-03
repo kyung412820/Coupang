@@ -4,6 +4,7 @@ import com.example.coupang.product.dto.response.ProductResponseDto;
 import com.example.coupang.product.entity.Product;
 import com.example.coupang.product.repository.ProductQueryRepository;
 import com.example.coupang.product.repository.ProductRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -31,12 +32,12 @@ public class ProductServiceImpl implements ProductService {
         return productQueryRepository.getProducts(pageable, title);
     }
 
-    @Cacheable(value = "products")
+    @Cacheable(value = "getProducts", key= "'products:page:' + #page + ':size' + #size", cacheManager = "ProductCacheManager")
     @Override
-    public Page<ProductResponseDto> getProductsV2(Integer page, Integer size, String title) {
+    public List<ProductResponseDto> getProductsV2(Integer page, Integer size, String title) {
         Pageable pageable = PageRequest.of(page - 1, size);
-
-        return productQueryRepository.getProducts(pageable, title);
+        Page<ProductResponseDto> results = productQueryRepository.getProducts(pageable, title);
+        return results.getContent();
     }
 
 }
