@@ -56,11 +56,4 @@ public class Coupon {
         this.useCount = useCount;
         this.maxCount = maxCount;
     }
-
-    public Coupon(String couponName, Long off, String status, LocalDateTime expDate) {
-        this.couponName = couponName;
-        this.off = off;
-        this.status = status;
-        this.expDate = expDate;
-    }
 }

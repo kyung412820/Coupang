@@ -2,7 +2,7 @@ package com.example.coupang.coupon.controller;
 
 import com.example.coupang.coupon.dto.CouponRequestDto;
 import com.example.coupang.coupon.dto.CouponResponseDto;
-import com.example.coupang.coupon.service.CouponService;
+import com.example.coupang.coupon.service.DistributedLockCouponService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,21 +11,16 @@ import java.util.List;
 @RequestMapping("/coupons")
 public class CouponController {
 
-    private final CouponService couponService;
+    private final DistributedLockCouponService distributedLockCouponService;
 
-    public CouponController(CouponService couponService) {
-        this.couponService = couponService;
+    public CouponController(DistributedLockCouponService distributedLockCouponService) {
+        this.distributedLockCouponService = distributedLockCouponService;
     }
 
-    // 쿠폰 발급 (요청 본문에서 CouponRequestDto 받기)
+    // 쿠폰 발급 (더미 유저 사용)
     @PostMapping("/issue")
     public CouponResponseDto issueCoupon(@RequestBody CouponRequestDto couponRequestDto) {
-        // userDetails를 통해 로그인된 유저 정보 접근 가능
-        // Long userId = userDetails.getId();
-        // 하드코딩된 더미 유저 ID (예: 유저 ID = 1)
-        Long dummyUserId = 1L;
-
-        return couponService.issueCoupon(
+        return distributedLockCouponService.issueCoupon(
                 couponRequestDto.getCouponName(),
                 couponRequestDto.getOff(),
                 couponRequestDto.getStatus(),
@@ -33,19 +28,10 @@ public class CouponController {
         );
     }
 
-    // 로그인한 유저의 모든 쿠폰 조회 (하드코딩된 유저 ID 사용)
+    // 로그인한 유저의 모든 쿠폰 조회
     @GetMapping
-    public List<CouponResponseDto> getCoupons() {
-        // 하드코딩된 더미 유저 ID (예: 유저 ID = 1)
-        Long dummyUserId = 1L;
-
-        return couponService.getCoupons(dummyUserId); // 더미 유저의 쿠폰 조회
+    public List<CouponResponseDto> getCoupons(@AuthenticationPrincipal UserDetails userDetails) {
+        Long userId = userDetails.getId();
+        return distributedLockCouponService.getCoupons(userId); // 로그인한 유저의 쿠폰 조회
     }
-
-//    // 로그인한 유저의 모든 쿠폰 조회
-//    @GetMapping
-//    public List<CouponResponseDto> getCoupons(@AuthenticationPrincipal UserDetails userDetails) {
-//        Long userId = userDetails.getId();
-//        return couponService.getCoupons(userId); // 로그인한 유저의 쿠폰 조회
-//    }
 }
