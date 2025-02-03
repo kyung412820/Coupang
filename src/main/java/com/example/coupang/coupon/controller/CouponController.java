@@ -3,6 +3,8 @@ package com.example.coupang.coupon.controller;
 import com.example.coupang.coupon.dto.CouponRequestDto;
 import com.example.coupang.coupon.dto.CouponResponseDto;
 import com.example.coupang.coupon.service.DistributedLockCouponService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,15 +35,18 @@ public class CouponController {
         );
     }
 
-//    /**
-//     * 로그인한 유저의 모든 쿠폰을 조회하는 메서드
-//     *
-//     * @param userDetails 로그인한 유저의 세부 정보
-//     * @return 로그인한 유저가 보유한 쿠폰 목록
-//     */
+    /**
+     * 로그인한 유저의 모든 쿠폰을 조회하는 메서드
+     *
+     * @return 로그인한 유저가 보유한 쿠폰 목록
+     */
 //    @GetMapping
-//    public List<CouponResponseDto> getCoupons(@AuthenticationPrincipal UserDetails userDetails) {
-//        Long userId = userDetails.getId();
-//        return distributedLockCouponService.getCoupons(userId); // 로그인한 유저의 쿠폰 조회
+//    public ResponseEntity<List<CouponResponseDto>> getUserCoupons() {
+//        Long userId = AuthUtil.getId(); // 현재 로그인한 사용자의 ID 가져오기
+//        if (userId == null) {
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // 인증되지 않은 경우
+//        }
+//        List<CouponResponseDto> coupons = distributedLockCouponService.getCouponsByUserId(userId); // 사용자 ID로 쿠폰 조회
+//        return ResponseEntity.ok(coupons); // 쿠폰 반환
 //    }
   }
