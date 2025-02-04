@@ -31,10 +31,20 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
     // Lombok (코드 자동 생성)
+    implementation 'co.elastic.clients:elasticsearch-java:8.17.1'  // 8.x 이상 버전 사용 시
+    implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.18.2'
+
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
     // MySQL
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.0'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.0' // Java 8 DateTime 지원
+
+
+    implementation 'net.datafaker:datafaker:2.0.2'
+
     runtimeOnly 'com.mysql:mysql-connector-j'
 
     // JUnit 테스트
