@@ -8,7 +8,6 @@ import com.example.coupang.user.entity.User;
 import com.example.coupang.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,13 +21,11 @@ public class NoLockCouponService {
 
     private final CouponRepository couponRepository;
     private final UserRepository userRepository;
-    private final RedisTemplate<String, Long> redisTemplate;
 
-    private static final String COUPON_COUNT_KEY = "coupon_count"; // 쿠폰 수량을 저장할 Redis 키
     private static final long MAX_COUPON_COUNT = 100L; // 최대 쿠폰 수
 
     /**
-     * 선착순으로 쿠폰을 발급하는 메서드 (락 없이)
+     * 선착순으로 쿠폰을 발급하는 메서드 (락 없이, 데이터베이스 기반으로 변경)
      *
      * @param couponName 발급할 쿠폰의 이름
      * @param off 쿠폰의 할인액
@@ -39,30 +36,25 @@ public class NoLockCouponService {
      */
     @Transactional
     public CouponResponseDto issueCoupon(String couponName, Long off, String status, LocalDateTime expDate) {
-        // 쿠폰 발급 수량 확인
-        Long couponCount = redisTemplate.opsForValue().get(COUPON_COUNT_KEY);
-
-        if (couponCount == null) {
-            couponCount = 0L; // 초기화
-        }
+        // 현재 발급된 쿠폰 개수 확인
+        long couponCount = couponRepository.count();
 
         if (couponCount >= MAX_COUPON_COUNT) {
-            // 쿠폰 수량이 100개 초과하면 더 이상 발급 불가
             throw new CouponCustomException.CouponLimitExceededException("쿠폰이 모두 소진되었습니다.");
         }
 
-        // 유저 데이터 초기화
-        List<User> dummyUsers = userRepository.findAll(); // 유저 리스트 가져오기
+        // 유저 데이터 가져오기
+        List<User> dummyUsers = userRepository.findAll();
+        if (dummyUsers.isEmpty()) {
+            throw new IllegalStateException("유저가 존재하지 않습니다.");
+        }
 
-        // 유저가 발급을 받았을 때
-        User user = dummyUsers.get((int) (couponCount % dummyUsers.size())); // 유저를 순차적으로 할당
+        // 순차적으로 유저 할당
+        User user = dummyUsers.get((int) (couponCount % dummyUsers.size()));
 
-        // 쿠폰 생성
+        // 쿠폰 생성 및 저장
         Coupon coupon = new Coupon(user, couponName, off, status, expDate, 0L, 1L);
         couponRepository.save(coupon);
-
-        // 발급된 쿠폰 수량을 Redis에 저장하고 증가
-        redisTemplate.opsForValue().increment(COUPON_COUNT_KEY, 1);
 
         return new CouponResponseDto(coupon.getId(), coupon.getCouponName(), coupon.getOff(), coupon.getStatus(), coupon.getExpDate());
     }
