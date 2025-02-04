@@ -27,11 +27,8 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public RestPage<ProductResponseDto> getProductsV1(Integer page, Integer size, String title) {
         Pageable pageable = PageRequest.of(page - 1, size);
-
-
         return productQueryRepository.getProducts(pageable, title);
     }
-
 
     @Cacheable(value = "getProducts", key= "'products:page:' + #page + ':size' + #size", cacheManager = "ProductCacheManager")
     @Override
