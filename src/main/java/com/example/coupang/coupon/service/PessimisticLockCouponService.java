@@ -58,13 +58,6 @@ public class PessimisticLockCouponService {
         // 3. 새로운 쿠폰 발급
         Coupon coupon = new Coupon(user, couponName, off, status, expDate, 0L, 1L);  // 한 사용자당 한 쿠폰만 발급
         coupon.incrementUseCount();
-        couponRepository.saveAndFlush(coupon);  // 즉시 저장
-
-        // 4. 발급 후 다시 전체 쿠폰 수를 확인하여 100개 이상이면 예외 발생
-        long updatedTotalCouponsIssued = couponRepository.countCouponsByStatus("사용가능");
-        if (updatedTotalCouponsIssued > maxCoupons) {
-            throw new CouponCustomException.CouponLimitExceededException("100개 이상의 쿠폰이 발급되었습니다.");
-        }
 
         // 5. 발급된 쿠폰 정보 반환
         return new CouponResponseDto(coupon.getId(), coupon.getCouponName(), coupon.getOff(), coupon.getStatus(), coupon.getExpDate());
