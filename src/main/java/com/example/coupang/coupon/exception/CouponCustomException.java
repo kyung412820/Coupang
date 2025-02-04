@@ -1,6 +1,6 @@
-package com.example.coupang.exception;
+package com.example.coupang.coupon.exception;
 
-public class CustomException {
+public class CouponCustomException {
 
     // 쿠폰 제한 초과 예외
     public static class CouponLimitExceededException extends RuntimeException {
