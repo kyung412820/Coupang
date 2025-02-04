@@ -3,7 +3,7 @@ package com.example.coupang.coupon.service;
 import com.example.coupang.coupon.entity.Coupon;
 import com.example.coupang.coupon.repository.CouponRepository;
 import com.example.coupang.coupon.dto.CouponResponseDto;
-import com.example.coupang.exception.CustomException;
+import com.example.coupang.coupon.exception.CouponCustomException;
 import com.example.coupang.user.entity.User;
 import com.example.coupang.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +33,7 @@ public class DistributedLockCouponService {
     private static final long MAX_COUPON_COUNT = 100L; // 최대 쿠폰 수
 
     /**
-     * 선착순으로 쿠폰을 발급하는 메서드
+     * 분산 락을 이용한 쿠폰 발급 메서드
      *
      * 이 메서드는 쿠폰을 발급하기 위해 Redis를 사용하여 동시성 문제를 해결합니다.
      * 먼저, 쿠폰 발급 수량을 확인하고, 쿠폰이 모두 소진된 경우 예외를 발생시킵니다.
@@ -84,7 +84,7 @@ public class DistributedLockCouponService {
 
             if (couponCount >= MAX_COUPON_COUNT) {
                 // 쿠폰 수량이 100개 이상이면 더 이상 발급 불가
-                throw new CustomException.CouponLimitExceededException("쿠폰이 모두 소진되었습니다.");
+                throw new CouponCustomException.CouponLimitExceededException("쿠폰이 모두 소진되었습니다.");
             }
 
             // 유저 데이터 초기화: 데이터베이스에서 모든 유저 가져오기
@@ -116,7 +116,7 @@ public class DistributedLockCouponService {
      */
     public List<CouponResponseDto> getCouponsByUserId(Long userId) {
         if (userId == null || !userRepository.existsById(userId)) {
-            throw new CustomException.InvalidUserIdException("유효하지 않은 유저 ID입니다.");
+            throw new CouponCustomException.InvalidUserIdException("유효하지 않은 유저 ID입니다.");
         }
         List<Coupon> coupons = couponRepository.findAllByUserId(userId);
         return coupons.stream()

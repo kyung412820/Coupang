@@ -45,7 +45,8 @@ public class Coupon {
     @NotNull
     private Long maxCount;
 
-
+    @Version
+    private Long version;
 
     public Coupon(User user, String couponName, Long off, String status, LocalDateTime expDate, Long useCount, Long maxCount){
         this.user = user;
@@ -55,5 +56,10 @@ public class Coupon {
         this.expDate = expDate;
         this.useCount = useCount;
         this.maxCount = maxCount;
+    }
+
+    public Coupon incrementUseCount() {
+        this.useCount++; // 발급 수 증가
+        return this;
     }
 }

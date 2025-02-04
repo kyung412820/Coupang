@@ -1,8 +1,7 @@
 package com.example.coupang.coupon.service;
 
-import com.example.coupang.user.entity.User;
-import com.example.coupang.user.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,38 +23,10 @@ public class DistributedLockCouponServiceTest {
     @Autowired
     private RedisTemplate<String, Long> redisTemplate;
 
-    @Autowired
-    private UserRepository userRepository;
-
-    private List<User> dummyUsers;
-
     @BeforeEach
     public void setUp() {
         // 쿠폰 수 초기화 (Redis에 저장된 coupon_count를 0으로 설정)
         redisTemplate.opsForValue().set("coupon_count", 0L);
-
-        // 유저 데이터 초기화
-        initializeDummyUsers(); // 유저 데이터 추가 메서드 호출
-    }
-
-    // 더미 유저 데이터 초기화 메서드
-    private void initializeDummyUsers() {
-        // 유저 리스트가 비어있으면 UserRepository를 통해 유저 데이터를 추가
-        if (dummyUsers == null || dummyUsers.isEmpty()) {
-            dummyUsers = userRepository.findAll();  // 이미 생성된 유저 목록 가져오기
-            if (dummyUsers.isEmpty()) {
-                // 유저가 없다면 더미 유저 200명 생성
-                for (int i = 1; i <= 200; i++) {
-                    User user = new User("User" + i, "user" + i + "@example.com", "password" + i);
-                    userRepository.save(user); // 유저 저장
-                }
-                // 새로 생성된 유저 목록을 가져오기
-                dummyUsers = userRepository.findAll();
-            }
-            assertFalse(dummyUsers.isEmpty(), "유저 리스트가 비어 있습니다. 유저를 먼저 추가해주세요.");
-        }
-        // 유저 데이터 초기화 완료 로그
-        System.out.println("유저 데이터 초기화 완료, 총 " + dummyUsers.size() + "명의 유저가 준비되었습니다.");
     }
 
     @Test
@@ -75,9 +46,10 @@ public class DistributedLockCouponServiceTest {
     }
 
     @Test
-    public void 동시성_이슈_제어_성공() throws InterruptedException {
-        // 200명의 유저가 동시에 쿠폰을 요청하는 상황을 시뮬레이션
-        int numberOfThreads = 200;
+    @DisplayName("분산적 락을 이용하여 동시성 제어")
+    public void 동시성_이슈_분산락_제어_성공() throws InterruptedException {
+        // 1000명의 유저가 동시에 쿠폰을 요청하는 상황을 시뮬레이션
+        int numberOfThreads = 1000;
 
         // 100개 이상의 쿠폰 발급을 막기 위한 CountDownLatch
         CountDownLatch latch = new CountDownLatch(numberOfThreads);
@@ -104,7 +76,7 @@ public class DistributedLockCouponServiceTest {
         // 쿠폰 발급이 100개로 제한된 것이 맞는지 확인
         Long couponCount = redisTemplate.opsForValue().get("coupon_count");
         assertEquals(100L, couponCount);
-        System.out.println("발급된 쿠폰 수: " + couponCount);
+        System.out.println("발급된 쿠폰 수(분산 락): " + couponCount);
 
         // 쿠폰 발급이 완료된 후 Redis에 저장된 쿠폰 수가 100개여야만 함
         Long finalCouponCount = redisTemplate.opsForValue().get("coupon_count");
