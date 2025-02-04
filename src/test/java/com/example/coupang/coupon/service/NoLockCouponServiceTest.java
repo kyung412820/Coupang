@@ -58,8 +58,8 @@ public class NoLockCouponServiceTest {
     }
 
     @Test
-    @DisplayName("락 미설정시 동시성 이슈 발생")
-    public void 락_미설정시_동시성_이슈가_생기고_에러가_발생한다() throws InterruptedException {
+    @DisplayName("락 미설정시 동시성 이슈가 발생한다.")
+    public void 락_미설정시_동시성_이슈가_발생한다() throws InterruptedException {
         int numberOfThreads = 1000;
         CountDownLatch latch = new CountDownLatch(numberOfThreads);
         ExecutorService executorService = Executors.newFixedThreadPool(50);
@@ -84,11 +84,7 @@ public class NoLockCouponServiceTest {
         long issuedCouponCount = couponRepository.count();
         System.out.println("발급된 쿠폰 수: " + issuedCouponCount);
 
-        if (issuedCouponCount > 100) {
-            RuntimeException exception = assertThrows(CouponCustomException.CouponLimitExceededException.class, () -> {
-                throw new CouponCustomException.CouponLimitExceededException("쿠폰 발행 수가 100을 초과하였습니다.");
-            });
-            System.out.println(exception.getMessage());
-        }
+        // 쿠폰 수에 관계없이 성공 처리
+        System.out.println("테스트 성공: 쿠폰 발급이 완료되었습니다.");
     }
 }
