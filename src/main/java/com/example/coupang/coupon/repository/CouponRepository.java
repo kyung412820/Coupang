@@ -19,7 +19,6 @@ public interface CouponRepository extends JpaRepository<Coupon, Long> {
     @Query("SELECT c FROM Coupon c WHERE c.status = :status")
     List<Coupon> findCouponsByStatusWithPessimisticLock(@Param("status") String status);
 
-
     long countCouponsByStatus(String status);
 
     // 유저 ID를 기준으로 모든 쿠폰 조회
