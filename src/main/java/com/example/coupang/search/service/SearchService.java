@@ -14,8 +14,6 @@ import co.elastic.clients.elasticsearch.core.search.*;
 import com.example.coupang.search.entity.SearchKeyword;
 import com.example.coupang.search.repository.SearchKeywordRepository;
 import co.elastic.clients.elasticsearch._types.aggregations.TermsAggregationExecutionHint;
-import com.example.coupang.search.entity.BookDocument;
-import com.example.coupang.search.dto.BookSearchResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -145,9 +143,7 @@ public class SearchService {
     // ---------------------------------------------------------------------
     // 3. 추천 검색어 기능 (Completion Suggester 이용)
     // ---------------------------------------------------------------------
-    /**
-     * 입력된 쿼리를 기반으로 자동 완성 추천 검색어를 반환합니다.
-     */
+
 //    public List<String> getSuggestions(String query, String categoryValue) {
 //        List<String> suggestions = new ArrayList<>();
 //
@@ -232,7 +228,7 @@ public class SearchService {
         );
 
         // 다중 필드에 대해 MatchQuery 리스트 생성
-        List<Query> queryList = createMatchQueryList(FIELD_NAME, fieldSuffixes, boostValueByMultiFieldMap, keyword)
+        List<Query> queryList = createMatchQueryList(fieldSuffixes, boostValueByMultiFieldMap, keyword)
                 .stream()
                 .map(MatchQuery::_toQuery)
                 .collect(Collectors.toList());
@@ -298,11 +294,11 @@ public class SearchService {
         return text != null && text.matches(".*[ㄱ-ㅎㅏ-ㅣ가-힣]+.*");
     }
 
-    private List<MatchQuery> createMatchQueryList(String fieldName, String[] fieldSuffixes,
+    private List<MatchQuery> createMatchQueryList(String[] fieldSuffixes,
                                                   Map<String, Float> boostValueByMultiFieldMap, String keyword) {
         return Arrays.stream(fieldSuffixes)
                 .flatMap(fieldSuffix -> boostValueByMultiFieldMap.entrySet().stream()
-                        .map(entry -> createMatchQuery(keyword, fieldName + fieldSuffix + entry.getKey(), entry.getValue())))
+                        .map(entry -> createMatchQuery(keyword, "searchText" + fieldSuffix + entry.getKey(), entry.getValue())))
                 .collect(Collectors.toList());
     }
 

@@ -2,7 +2,6 @@ package com.example.coupang.search.controller;
 
 // SearchService.java
 import com.example.coupang.search.entity.SearchKeyword;
-import com.example.coupang.search.repository.SearchKeywordRepository;
 import com.example.coupang.search.service.SearchService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
