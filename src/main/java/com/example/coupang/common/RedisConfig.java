@@ -33,6 +33,9 @@ public class RedisConfig {
         // 키 직렬화 방식을 StringRedisSerializer로 설정
         template.setKeySerializer(new StringRedisSerializer());
 
+        // 값 직렬화 (한글 깨짐 방지)
+        template.setValueSerializer(new StringRedisSerializer());
+
         // 값 직렬화 방식을 Jackson2JsonRedisSerializer로 설정
         Jackson2JsonRedisSerializer<Long> serializer = new Jackson2JsonRedisSerializer<>(Long.class);
         template.setValueSerializer(serializer);
