@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -38,13 +39,25 @@ public class CouponController {
      *
      * @return 로그인한 유저가 보유한 쿠폰 목록
      */
-//    @GetMapping
-//    public ResponseEntity<List<CouponResponseDto>> getUserCoupons() {
-//        Long userId = AuthUtil.getId(); // 현재 로그인한 사용자의 ID 가져오기
-//        if (userId == null) {
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // 인증되지 않은 경우
-//        }
-//        List<CouponResponseDto> coupons = distributedLockCouponService.getCouponsByUserId(userId); // 사용자 ID로 쿠폰 조회
-//        return ResponseEntity.ok(coupons); // 쿠폰 반환
-//    }
-  }
+    @GetMapping
+    public ResponseEntity<List<CouponResponseDto>> getUserCoupons(Principal principal) {
+        // principal이 null인지 체크
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // 인증되지 않은 경우
+        }
+
+        // principal.getName()에서 사용자 ID를 가져오기 (문자열을 Long으로 변환)
+        Long userId;
+        try {
+            // getName()이 반환하는 값이 ID 문자열이라고 가정
+            userId = Long.parseLong(principal.getName()); // 문자열을 Long으로 변환
+        } catch (NumberFormatException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // 변환 실패 시 처리
+        }
+
+        // 사용자 ID로 쿠폰 조회
+        List<CouponResponseDto> coupons = distributedLockCouponService.getCouponsByUserId(userId);
+
+        return ResponseEntity.ok(coupons); // 쿠폰 반환
+    }
+}
