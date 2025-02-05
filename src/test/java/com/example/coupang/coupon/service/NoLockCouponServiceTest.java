@@ -30,33 +30,6 @@ public class NoLockCouponServiceTest {
     @Autowired
     private CouponRepository couponRepository;
 
-    @Autowired
-    private UserRepository userRepository;
-
-    private List<User> dummyUsers;
-
-    @BeforeEach
-    public void setUp() {
-        initializeDummyUsers();
-        couponRepository.deleteAll(); // 쿠폰 데이터 초기화
-    }
-
-    private void initializeDummyUsers() {
-        List<User> existingUsers = userRepository.findAll();
-
-        if (existingUsers.isEmpty()) {
-            List<User> newUsers = new ArrayList<>();
-            for (int i = 1; i <= 200; i++) {
-                newUsers.add(new User("User" + i, "user" + i + "@example.com", "password" + i));
-            }
-            userRepository.saveAll(newUsers);
-            existingUsers = newUsers;
-        }
-
-        dummyUsers = existingUsers;
-        assertFalse(dummyUsers.isEmpty(), "유저 리스트가 비어 있습니다. 유저를 먼저 추가해주세요.");
-    }
-
     @Test
     @DisplayName("락 미설정시 동시성 이슈가 발생한다.")
     public void 락_미설정시_동시성_이슈가_발생한다() throws InterruptedException {

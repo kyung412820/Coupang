@@ -45,12 +45,7 @@ public class NoLockCouponService {
 
         // 유저 데이터 가져오기
         List<User> dummyUsers = userRepository.findAll();
-        if (dummyUsers.isEmpty()) {
-            throw new IllegalStateException("유저가 존재하지 않습니다.");
-        }
-
-        // 순차적으로 유저 할당
-        User user = dummyUsers.get((int) (couponCount % dummyUsers.size()));
+        User user = dummyUsers.get((int) (Math.random() * dummyUsers.size())); // 무작위 유저 선택
 
         // 쿠폰 생성 및 저장
         Coupon coupon = new Coupon(user, couponName, off, status, expDate, 0L, 1L);
