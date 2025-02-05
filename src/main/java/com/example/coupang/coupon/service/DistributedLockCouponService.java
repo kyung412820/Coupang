@@ -46,6 +46,7 @@ public class DistributedLockCouponService {
      * @return 발급된 쿠폰의 정보가 담긴 DTO
      * @throws RuntimeException 쿠폰이 모두 소진된 경우 또는 다른 프로세스에서 쿠폰 발급을 처리 중일 때
      */
+    @Transactional
     public CouponResponseDto issueCoupon(String couponName, Long off, String status, LocalDateTime expDate) {
         ValueOperations<String, String> operations = redisTemplate.opsForValue();
 
