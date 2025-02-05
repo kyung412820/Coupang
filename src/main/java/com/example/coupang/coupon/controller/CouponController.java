@@ -47,10 +47,10 @@ public class CouponController {
         }
 
         // principal.getName()에서 사용자 ID를 가져오기 (문자열을 Long으로 변환)
-        Long userId;
+        String userId;
         try {
             // getName()이 반환하는 값이 ID 문자열이라고 가정
-            userId = Long.parseLong(principal.getName()); // 문자열을 Long으로 변환
+            userId = principal.getName(); // 문자열을 Long으로 변환
         } catch (NumberFormatException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // 변환 실패 시 처리
         }
