@@ -18,12 +18,12 @@ public class UserDataInit implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        UUID uuid = UUID.randomUUID();
 
         // 더미 유저가 없다면 유저 데이터를 추가
         if (userRepository.count() == 0) {
             // 더미 유저 1000명 생성
             for (int i = 1; i <= 1000; i++) {
+                UUID uuid = UUID.randomUUID();
                 User user = new User(uuid.toString(),"User" + i, "user" + i + "@example.com", "password" + i);
                 userRepository.save(user); // 유저 저장
             }
