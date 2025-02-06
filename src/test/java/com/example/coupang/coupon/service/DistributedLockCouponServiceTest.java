@@ -1,9 +1,15 @@
 package com.example.coupang.coupon.service;
 
+import com.example.coupang.coupon.repository.CouponRepository;
+import com.example.coupang.utils.AuthUtil;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
 
@@ -11,11 +17,18 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.web.servlet.MockMvc;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@ActiveProfiles("test")
 @SpringBootTest
+@AutoConfigureMockMvc
 public class DistributedLockCouponServiceTest {
+
+    @Autowired
+    private MockMvc mockMvc;
 
     @Autowired
     private DistributedLockCouponService distributedLockCouponService;
@@ -23,10 +36,24 @@ public class DistributedLockCouponServiceTest {
     @Autowired
     private RedisTemplate<String, Long> redisTemplate;
 
+    @Autowired
+    private CouponRepository couponRepository;
+
+    private MockedStatic<AuthUtil> mockAuthUser;
+
     @BeforeEach
     public void setUp() {
+
+
+
         // 쿠폰 수 초기화 (Redis에 저장된 coupon_count를 0으로 설정)
         redisTemplate.opsForValue().set("coupon_count", 0L);
+    }
+
+    @AfterEach
+    public void tearDown() {
+        redisTemplate.opsForValue().set("coupon_count", 0L);
+        couponRepository.deleteAll();
     }
 
     @Test
@@ -58,6 +85,9 @@ public class DistributedLockCouponServiceTest {
         for (int i = 0; i < numberOfThreads; i++) {
             new Thread(() -> {
                 try {
+                    mockAuthUser = Mockito.mockStatic(AuthUtil.class);
+                    mockAuthUser.when(AuthUtil::getId).thenReturn(1L);
+
                     distributedLockCouponService.issueCoupon(
                             "Test Coupon", 20L, "AVAILABLE", LocalDateTime.now().plusWeeks(1)
                     );
@@ -79,8 +109,10 @@ public class DistributedLockCouponServiceTest {
         System.out.println("발급된 쿠폰 수(분산 락): " + couponCount);
 
         // 쿠폰 발급이 완료된 후 Redis에 저장된 쿠폰 수가 100개여야만 함
-        Long finalCouponCount = redisTemplate.opsForValue().get("coupon_count");
+        Long finalCouponCount = couponRepository.count();
         assertEquals(100L, finalCouponCount);
         System.out.println("Redis에 저장된 쿠폰 수: " + finalCouponCount);
     }
+
+
 }

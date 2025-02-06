@@ -9,7 +9,7 @@ BEGIN
 
     WHILE i <= 5000000 DO
 
-        SET user_id = (i % 3) + 1;
+        SET user_id = 1;
 
 INSERT INTO product (user_id, product_name, contents, price)
 VALUES (user_id,

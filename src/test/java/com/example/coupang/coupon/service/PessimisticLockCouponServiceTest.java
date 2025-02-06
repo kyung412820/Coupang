@@ -2,6 +2,7 @@ package com.example.coupang.coupon.service;
 
 import com.example.coupang.coupon.repository.CouponRepository;
 import com.example.coupang.coupon.exception.CouponCustomException;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +13,11 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
+import org.springframework.test.context.ActiveProfiles;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@ActiveProfiles("test")
 @SpringBootTest
 public class PessimisticLockCouponServiceTest {
 
@@ -23,6 +26,11 @@ public class PessimisticLockCouponServiceTest {
 
     @Autowired
     private CouponRepository couponRepository;
+
+    @AfterEach
+    public void tearDown() {
+        couponRepository.deleteAll();
+    }
 
     @Test
     @DisplayName("비관적 락을 이용하여 쿠폰 발급 동시성 제어")

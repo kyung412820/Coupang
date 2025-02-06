@@ -3,6 +3,7 @@ package com.example.coupang.coupon.service;
 import com.example.coupang.coupon.exception.CouponCustomException;
 import com.example.coupang.coupon.repository.CouponRepository;
 import jakarta.persistence.OptimisticLockException;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +14,11 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
+import org.springframework.test.context.ActiveProfiles;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@ActiveProfiles("test")
 @SpringBootTest
 public class OptimisticLockCouponServiceTest {
 
@@ -27,11 +30,16 @@ public class OptimisticLockCouponServiceTest {
 
     private final int maxCoupons = 100; // 최대 발급 가능한 쿠폰 수
 
+    @AfterEach
+    public void tearDown() {
+        couponRepository.deleteAll();
+    }
+
     @Test
     @DisplayName("낙관적 락을 이용하여 동시성 제어")
     public void 동시성_이슈_낙관적락_제어_성공() throws InterruptedException {
         int threadCount = 1000; // 테스트 스레드 수
-        ExecutorService executorService = Executors.newFixedThreadPool(1); // 스레드 개수 제한
+        ExecutorService executorService = Executors.newFixedThreadPool(1000); // 스레드 개수 제한
         CountDownLatch latch = new CountDownLatch(threadCount);
         AtomicInteger successCount = new AtomicInteger();
         AtomicInteger failureCount = new AtomicInteger();

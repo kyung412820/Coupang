@@ -5,6 +5,7 @@ import com.example.coupang.coupon.exception.CouponCustomException;
 import com.example.coupang.coupon.repository.CouponRepository;
 import com.example.coupang.user.entity.User;
 import com.example.coupang.user.repository.UserRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,10 +18,12 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import org.springframework.test.context.ActiveProfiles;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@ActiveProfiles("test")
 @SpringBootTest
 public class NoLockCouponServiceTest {
 
@@ -29,6 +32,11 @@ public class NoLockCouponServiceTest {
 
     @Autowired
     private CouponRepository couponRepository;
+
+    @AfterEach
+    public void tearDown() {
+        couponRepository.deleteAll();
+    }
 
     @Test
     @DisplayName("락 미설정시 동시성 이슈가 발생한다.")

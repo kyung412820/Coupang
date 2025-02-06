@@ -5,6 +5,7 @@ import com.example.coupang.coupon.dto.CouponResponseDto;
 import com.example.coupang.coupon.service.DistributedLockCouponService;
 import com.example.coupang.utils.AuthUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/coupons")
@@ -43,6 +45,7 @@ public class CouponController {
     @GetMapping
     public ResponseEntity<List<CouponResponseDto>> getUserCoupons(Principal principal) {
         Long userId = AuthUtil.getId();
+        log.info("userId = {}", userId);
         // principal이 null인지 체크
         if (userId == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // 인증되지 않은 경우

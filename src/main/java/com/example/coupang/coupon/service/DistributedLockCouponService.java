@@ -6,6 +6,7 @@ import com.example.coupang.coupon.dto.CouponResponseDto;
 import com.example.coupang.coupon.exception.CouponCustomException;
 import com.example.coupang.user.entity.User;
 import com.example.coupang.user.repository.UserRepository;
+import com.example.coupang.utils.AuthUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -87,11 +88,14 @@ public class DistributedLockCouponService {
                 throw new CouponCustomException.CouponLimitExceededException("쿠폰이 모두 소진되었습니다.");
             }
 
-            // 유저 데이터 초기화: 데이터베이스에서 모든 유저 가져오기
-            List<User> dummyUsers = userRepository.findAll();
+//            // 유저 데이터 초기화: 데이터베이스에서 모든 유저 가져오기
+//            List<User> dummyUsers = userRepository.findAll();
+//
+//            // 발급받을 유저 선택: 쿠폰 수를 유저 수로 나눈 나머지를 인덱스로 사용하여 순환적으로 할당
+//            User user = dummyUsers.get((int) (couponCount % dummyUsers.size()));
 
-            // 발급받을 유저 선택: 쿠폰 수를 유저 수로 나눈 나머지를 인덱스로 사용하여 순환적으로 할당
-            User user = dummyUsers.get((int) (couponCount % dummyUsers.size()));
+            Long userId = AuthUtil.getId();
+            User user = userRepository.findById(userId).orElse(null);
 
             // 쿠폰 생성 (useCount는 0, maxCount는 1로 설정)
             Coupon coupon = new Coupon(user, couponName, off, status, expDate, 0L, 1L);
