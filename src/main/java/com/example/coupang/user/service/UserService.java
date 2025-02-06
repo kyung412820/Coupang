@@ -1,45 +1,34 @@
 package com.example.coupang.user.service;
 
-import com.example.coupang.user.dto.request.UpdateBlackListRequestDto;
 import com.example.coupang.user.entity.User;
 import com.example.coupang.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public User findById(String userId) {
-        Optional<User> user = userRepository.findById(userId);
-        if (user.isEmpty()) {
-            throw new IllegalArgumentException("User not found with email: " + userId);
+    public User registerUser(String email, String rawPassword) {
+        // 이메일 중복 확인
+        if (userRepository.existsByEmail(email)) {
+            throw new RuntimeException("Email already in use: " + email);
         }
-        return user.get();
-    }
 
-    public void updateBlackList(UpdateBlackListRequestDto requestDto) {
-        Optional<User> optionalUser = userRepository.findByEmail(requestDto.getEmail());
-        if (optionalUser.isEmpty()) {
-            ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not Found");
-        } else {
-            User user = optionalUser.get();
-            user.setBlacklisted(true);
-            userRepository.save(user);
-            ResponseEntity.ok("User blacklisted successfully");
-        }
-    }
+        // 이메일에서 @ 이전의 값 추출
+        String name = email.split("@")[0];
 
-    public void deleteUser(String email) {
-        // 사용자 조회
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        userRepository.delete(user);
+        // 사용자 생성 및 저장
+        User user = User.builder()
+                .name(name) // 이메일의 @ 앞 부분을 이름으로 사용
+                .email(email)
+                .password(passwordEncoder.encode(rawPassword))
+                .build();
+
+        return userRepository.save(user);
     }
 }

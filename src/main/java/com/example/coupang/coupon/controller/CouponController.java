@@ -3,6 +3,7 @@ package com.example.coupang.coupon.controller;
 import com.example.coupang.coupon.dto.CouponRequestDto;
 import com.example.coupang.coupon.dto.CouponResponseDto;
 import com.example.coupang.coupon.service.DistributedLockCouponService;
+import com.example.coupang.utils.AuthUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,16 +42,17 @@ public class CouponController {
      */
     @GetMapping
     public ResponseEntity<List<CouponResponseDto>> getUserCoupons(Principal principal) {
+        Long userId = AuthUtil.getId();
         // principal이 null인지 체크
-        if (principal == null) {
+        if (userId == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // 인증되지 않은 경우
         }
 
         // principal.getName()에서 사용자 ID를 가져오기 (문자열을 Long으로 변환)
-        String userId;
+
         try {
             // getName()이 반환하는 값이 ID 문자열이라고 가정
-            userId = principal.getName(); // 문자열을 Long으로 변환
+
         } catch (NumberFormatException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // 변환 실패 시 처리
         }

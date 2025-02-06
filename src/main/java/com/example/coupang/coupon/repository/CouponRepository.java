@@ -22,5 +22,5 @@ public interface CouponRepository extends JpaRepository<Coupon, Long> {
     long countCouponsByStatus(String status);
 
     // 유저 ID를 기준으로 모든 쿠폰 조회
-    List<Coupon> findAllByUserId(String userId);
+    List<Coupon> findAllByUserId(Long userId);
 }

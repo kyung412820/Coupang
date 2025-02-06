@@ -1,4 +1,5 @@
-package com.example.coupang.user.dto;
+package com.example.coupang.auth.dto;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -8,7 +9,7 @@ import jakarta.validation.constraints.NotBlank;
 @Getter
 @NoArgsConstructor(force = true)  // 기본 생성자 강제 생성
 @RequiredArgsConstructor
-public class RegisterRequestDto {
+public class LoginRequestDto {
 
     @NotBlank(message = "Email cannot be blank")
     @Email(message = "Invalid email format")
@@ -17,3 +18,4 @@ public class RegisterRequestDto {
     @NotBlank(message = "Password cannot be blank")
     private final String password;
 }
+

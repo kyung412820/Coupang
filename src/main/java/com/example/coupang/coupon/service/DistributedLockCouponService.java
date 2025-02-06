@@ -114,7 +114,7 @@ public class DistributedLockCouponService {
      * @param userId 쿠폰을 조회할 유저의 ID
      * @return 유저가 보유한 쿠폰 목록
      */
-    public List<CouponResponseDto> getCouponsByUserId(String userId) {
+    public List<CouponResponseDto> getCouponsByUserId(Long userId) {
         if (userId == null || !userRepository.existsById(userId)) {
             throw new CouponCustomException.InvalidUserIdException("유효하지 않은 유저 ID입니다.");
         }

@@ -31,9 +31,11 @@ public class OptimisticLockCouponService1 {
         }
 
         // 유저 데이터 가져오기
-        List<User> allUsers = userRepository.findAll();
-        User user = allUsers.get((int) (Math.random() * allUsers.size())); // 무작위 유저 선택
-
+        // 유저 데이터 가져오기
+        User user = userRepository.findById((long) (Math.random() * 100)) // 임시로 ID로 찾을 수 있도록 예시 수정
+                .orElseThrow(() -> new CouponCustomException.UserNotFoundException("유저를 찾을 수 없습니다."));
+// List<User> allUsers = userRepository.findAll();
+// User user = allUsers.get((int) (Math.random() * allUsers.size())); // 무작위 유저 선택
         // 해당 유저가 이미 쿠폰을 발급받았는지 체크
         Coupon coupon = couponRepository.findByUserIdAndStatusWithOptimistic(Long.valueOf(user.getId()), "사용가능");
         if (coupon != null) {

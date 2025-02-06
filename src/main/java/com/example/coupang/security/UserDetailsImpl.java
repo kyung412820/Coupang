@@ -1,6 +1,5 @@
 package com.example.coupang.security;
 
-
 import com.example.coupang.user.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -37,7 +36,7 @@ public class UserDetailsImpl implements UserDetails {
     }
 
     public Long getId() {
-        return Long.valueOf(user.getId());
+        return user.getId();
     }
 
     @Override

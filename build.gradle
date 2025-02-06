@@ -65,24 +65,22 @@ dependencies {
     // Redis + Redisson
     implementation 'org.redisson:redisson-spring-boot-starter:3.23.4'
 
-    // Spring Security
+    // Spring Security: 애플리케이션 보안을 위한 라이브러리
     implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
-    implementation 'org.springframework.security:spring-security-test'
 
-    // OAuth2
-    implementation 'org.springframework.security:spring-security-oauth2-client:6.4.2' // 최신 버전
-    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    // JWT: JSON Web Token 생성 및 검증
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5' // JSON 파싱 지원
 
     // Jakarta Servlet API
     implementation 'jakarta.servlet:jakarta.servlet-api:6.0.0' // ✅ Java EE → Jakarta EE 전환
 
-    // Spring Dotenv: .env 파일 지원 라이브러리 추가
-    implementation 'me.paulschwarz:spring-dotenv:3.0.0'
 
     //타임리프 설정
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
+
     // Jakarta Servlet API
     implementation 'jakarta.servlet:jakarta.servlet-api:6.0.0' // ✅ Java EE → Jakarta EE 전환
 

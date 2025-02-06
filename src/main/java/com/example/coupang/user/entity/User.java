@@ -3,8 +3,10 @@ package com.example.coupang.user.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,34 +14,29 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
-
-@Entity
 @Getter
-@Setter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
 @Table(name = "users")
 public class User implements UserDetails {
 
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-
-    @Column(length = 20)
+    @NotBlank
+    @Column(nullable = false)
     private String name;
 
     @NotBlank
     @Email
-    @Column(length = 100, unique = true)
+    @Column(nullable = false, unique = true)
     private String email;
 
-    private String profile_url;
-
-
-    @Column(length = 255)
+    @NotBlank
+    @Column(nullable = false)
     private String password;
 
-    @Column
-    private boolean isBlacklisted = false;
 
     @Builder
     public User(String name, String email, String password) {
@@ -49,29 +46,27 @@ public class User implements UserDetails {
     }
 
     @Builder
-    public User(String id, String name, String email, String password) {
+    public User(Long id, String name, String email, String password) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
     }
-
     @Override
     public String getUsername() {
         return email;
     }
 
-    public boolean getIsBlacklisted(){
-        return isBlacklisted;
-    }
+    @Override
+    public String getPassword(){ return password;}
 
-    //해당 User의 권한을 리턴하는곳!!
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return  List.of(new SimpleGrantedAuthority("user"));
+        return  null;
     }
-
-
+    public void updatePassword(String encodedPassword) {
+        this.password = encodedPassword;
+    }
     @Override
     public boolean isAccountNonExpired() {
         return true;
