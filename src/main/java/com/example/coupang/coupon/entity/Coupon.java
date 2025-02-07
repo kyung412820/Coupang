@@ -10,6 +10,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 
@@ -35,8 +36,8 @@ public class Coupon {
     @NotBlank
     private String status;
 
-    @NotBlank
-    private LocalDateTime exrp_date;
+    @NotNull
+    private LocalDateTime expDate;
 
     @NotNull
     private Long useCount;
@@ -44,15 +45,21 @@ public class Coupon {
     @NotNull
     private Long maxCount;
 
+    @Version
+    private Long version;
 
-
-    public Coupon(User user, String couponName, Long off, String status, LocalDateTime exrp_date, Long useCount, Long maxCount){
+    public Coupon(User user, String couponName, Long off, String status, LocalDateTime expDate, Long useCount, Long maxCount){
         this.user = user;
         this.couponName = couponName;
         this.off = off;
         this.status = status;
-        this.exrp_date = exrp_date;
+        this.expDate = expDate;
         this.useCount = useCount;
         this.maxCount = maxCount;
+    }
+
+    public Coupon incrementUseCount() {
+        this.useCount++; // 발급 수 증가
+        return this;
     }
 }
