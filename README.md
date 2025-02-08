@@ -37,8 +37,214 @@
 - 적용 전, 적용 후 성능 테스트
 
 ### 4. ElasticSearch를 활용한 검색 서비스
-- ElasticSearch를 이용한 인기 검색어 조회 및 상품 검색 기가 </summary>
- 
+- ElasticSearch를 이용한 인기 검색어 조회 및 상품 검색 기능 구현
+
+### 5. AWS 배포
+- 클라우드에서 서버 배포 및 운영 환경 구축
+- 자동화된 파이프라인을 통해 안정적이고 신속한 배포 환경 구축
+- 관리형 데이터베이스를 사용하여 안정적인 데이터 관리 및 운영 실습
+
+
+## 🏆 **Architecture** 
+![image](https://github.com/user-attachments/assets/27a7d8be-d38d-4036-834b-57b93aa53c1b)
+
+## 📚 **쿠빵 Team Notion 보러가기**
+[쿠빵 Team Notion](https://teamsparta.notion.site/8-5c74090342f94d1bae575d1f6888cdc1)
+
+## 📄 **발표 보고서 보러가기**
+[발표 보고서](https://www.canva.com/design/DAGaRbld9so/37ehM1xDZDsknpC-fXeebQ/edit?utm_content=DAGaRbld9so&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
+
+## 🎬 **발표 영상 보러가기**
+[발표 영상](https://www.youtube.com/watch?v=-8S3XLLW6jA)
+
+## 📝 **와이어프레임**
+![와이어프레임 이미지](https://github.com/llRosell/Coupang/blob/dev/%E1%84%8F%E1%85%AE%E1%84%88%E1%85%A1%E1%86%BC%20%E1%84%8B%E1%85%AA%E1%84%8B%E1%85%B5%E1%84%8B%E1%85%A5%E1%84%91%E1%85%B3%E1%84%85%E1%85%A6%E1%84%8B%E1%85%B5%E1%86%B7.png?raw=true)
+</details>
+
+## 💬 **ERD**
+![ERD 이미지](https://raw.githubusercontent.com/llRosell/Coupang/refs/heads/dev/ERD.webp)
+</details>
+
+## 🗒️ API 명세서
+
+
+| **기능**           | **method** | **URL**                              | **body**                                                                                                                      |
+|------------------|------------|------------------------------------|-------------------------------------------------------------------------------------------------------------------------------|
+| **회원가입**        | POST       | /user/register                     | {<br/>"email": "email@example.com",<br/>"password": "data"<br/>}                                                                   |
+| **로그인**          | POST       | /auth/login                        | {<br>"email": "email@example.com",<br>"password": "data"<br>}                                          |
+| **상품 목록 조회**   | GET        | /products/v2/list                  | 없음                                                                                                                            |
+| **쿠폰 조회**        | GET        | /coupons                            | 없음                                                                                                                            |
+| **쿠폰 발급**        | POST       | /coupons/issue                      | {<br>"couponName": "20% 할인 쿠폰",<br>"off": 20,<br>"status": "사용 가능",<br>"expDate": "2025-12-31T00:00:00"<br>} |
+| **자동완성**         | GET        | /search/suggestions?query=a        | 없음                                                                                                                            |
+| **인기 검색어 조회**  | GET        | /search/popular                    | 없음                                                                                                                            |
+| **인기 검색어 조회 - 맵 최적화** | GET        | /search/popular/optimized           | 없음                                                                                                                            |
+| **인기 검색어 조회 - 필터적용** | GET        | /search/popular/fastest             | 없음                                                                                                                            |
+| **데이터 추가**      | POST       | /search/insert/1000000              | {<br>"search_ic": "1",<br>"search_text": "소위키"<br>}                                                      |
+| **검색에 생성**      | POST       | /search                            | {<br>"search_ic": "1",<br>"search_text": "소위키"<br>}                                                       |
+
+## 📽️ 프로젝트 목표
+
+- **선착순 쿠폰 발급**: 대량 트래픽을 처리하며 빠르고 정확한 쿠폰 발급 서비스를 제공합니다.
+- **분산 락을 통한 동시성 제어**: 선착순 쿠폰 발급 시스템을 구현하여 사용자들의 동시 요청을 처리합니다.
+- **AWS 환경에서 배포**: EC2, RDS, 로드밸런싱, S3 및 도메인 관리 등 AWS 서비스를 활용하여 안정적이고 확장 가능한 시스템을 구축합니다.
+
+---
+
+## 📚 **기술 스택**
+
+### Back-end
+![Java](https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white)
+![Spring](https://img.shields.io/badge/spring-6DB33F?style=for-the-badge&logo=spring&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=spring&logoColor=white)
+![MySQL](https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
+![Redis](https://img.shields.io/badge/redis-DC382D?style=for-the-badge&logo=redis&logoColor=white)
+![Elasticsearch](https://img.shields.io/badge/elasticsearch-47A248?style=for-the-badge&logo=elasticsearch&logoColor=white)
+
+- **Java**: Spring Boot 기반 서버 개발
+- **Spring**: 의존성 주입 및 AOP, 트랜잭션 관리 등 다양한 엔터프라이즈 기능을 제공하는 프레임워크
+- **Spring Boot**: 빠른 설정 및 간단한 구성을 통해 스프링 기반 애플리케이션을 개발할 수 있도록 돕는 프레임워크
+- **Redis**: 캐시 관리 및 분산 락을 통한 동시성 제어
+- **MySQL**: AWS RDS에서 제공되는 관계형 데이터베이스
+- **Elasticsearch**: 인기 검색어 순위 및 빠른 검색 기능 제공
+
+
+### AWS
+![EC2](https://img.shields.io/badge/amazon_ec2-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white)
+![RDS](https://img.shields.io/badge/amazon_rds-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white)
+![Loadbalancer](https://img.shields.io/badge/amazon_loadbalancer-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white)
+![S3](https://img.shields.io/badge/amazon_s3-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white)
+![Route 53](https://img.shields.io/badge/route_53-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white)
+
+- **EC2**: 애플리케이션 서버 운영
+- **RDS**: 관계형 데이터베이스 관리
+- **로드밸런싱**: 트래픽을 여러 EC2 인스턴스에 분산하여 처리
+- **S3**: 이미지 및 기타 파일 저장 관리
+- **도메인 관리**: AWS Route 53을 통해 도메인 설정
+
+### Tools
+![JMeter](https://img.shields.io/badge/jmeter-F5A500?style=for-the-badge&logo=apachejmeter&logoColor=white)
+![Docker](https://img.shields.io/badge/docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
+![Git](https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white)
+![GitHub](https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white)
+
+- **JMeter**: 성능 테스트 및 로드 테스트를 통한 시스템 안정성 검증
+- **Docker**: 개발 및 배포 환경을 컨테이너화하여 일관성 있는 개발 환경 제공
+- **Git**: 버전 관리 시스템
+- **GitHub**: GitHub을 사용한 협업 및 코드 관리
+
+---
+
+## 🛒 선착순 쿠폰 발급 서비스
+
+### 동시성 제어 테스트 결과
+
+<tr>
+<tr>
+
+### 선착순 쿠폰 발급 서비스
+
+▶️ **데이터 정합성**:
+- **분산 락 = 비관적 락 > 낙관적 락**
+- 분산 락과 비관적 락은 항상 일관되게 100개의 쿠폰을 발급받음.
+- 낙관적 락은 100개 이상의 쿠폰을 발급받는 테스트에서 실패하는 경우가 더 많음.
+
+낙관적 락은 충돌이 자주 발생하는 환경에서는 적합하지 않다는 결론을 얻었습니다.
+
+비관적 락은 많은 스레드가 동시에 몰릴 경우 DB 부하가 높아질 수 있습니다.
+
+### 테스트 결과 분석
+
+선착순 쿠폰 100개를 발급받는 서비스와 같이 짧은 시간에 충돌이 많이 발생하는 경우, **Redis 분산 락**을 사용하는 것이 가장 적합하다는 판단을 내렸습니다. 
+
+#### 주요 결과:
+- **분산 락**과 **비관적 락**은 항상 일관되게 100개의 쿠폰을 발급하며, 데이터 정합성을 보장합니다.
+- **낙관적 락**은 락을 명확하게 설정하지 않고 버전 관리 방식(버전 어노테이션)을 사용하기 때문에, 동시 스레드 환경에서는 쿠폰 발급 수가 100개를 넘는 상황이 발생할 수 있습니다. 이로 인해 테스트에 실패하는 경우가 많았습니다.
+
+#### 결론:
+- **낙관적 락**은 충돌 발생이 잦은 환경에서는 적합하지 않으므로 사용을 피해야 합니다.
+- **Redis 분산 락**은 충돌이 많이 발생하는 환경에서 데이터 정합성을 보장하고, 응답 시간이 빠르므로 **선택하는 것이 가장 효율적**입니다.
+  
+---
+
+## 🏆 **서비스 성능**
+
+### 대용량 트래픽 처리
+- **가상 쿠폰 발급 사용자 1000명**, 쿠폰 100건 발급 시 **Redis 분산락** 이용하면 2초 이내
+
+### 상품 조회 속도
+- **상품 데이터 50만 건**
+- 100스레드 100회 반복, 총 10,000건의 요청,
+- jmeter로 성능테스트 시 페이지네이션 상품 조회 속도: **0.5초 이내**
+
+### 검색 속도
+- **최초 검색 속도**: 39ms
+- **캐싱 이후 검색 속도**: **17ms**
+
+---
+
+## 🔧 **성능 개선**
+
+### 1. 💿 [최순우] **DB 최적화**: 상품 데이터 조회 속도 개선
+### 2. 🚀 [최대현] **레디스 캐싱**: 데이터 캐싱을 통한 빠른 응답 처리
+
+<tr>
+<tr>
+
+ <summary>📊 [최대현] 캐싱 적용 전 vs Redis Cache 적용 후 성능 비교 결과 </summary>
+
+**캐시 미적용**
+<img alt="스크린샷 2025-02-06 오후 5 07 38" src="https://github.com/user-attachments/assets/1869bf69-de9a-4c37-8ee8-62ef26ad23e7" />
+
+**캐시 적용**
+<img alt="스크린샷 2025-02-06 오후 5 08 19" src="https://github.com/user-attachments/assets/0dd89485-0b61-4f28-b61f-48ec41655c52" />
+
+
+|        | **평균 응답속도** |
+  |--------|-------------|
+| 캐시 미적용 | 5초 91ms     |
+| 캐시 적용  | 1초 880ms    |
+
+- **최적화 결과**
+  - Redis Cache 적용 후 **평균 응답 속도 3초 211ms 향상** ㅇ
+
+### 3. 🛣️ [최순우] **부하 분산**: AWS 로드밸런싱을 활용한 부하 분산
+### 4. 🔍 [이경훈] **Elasticsearch**: 엘라스틱 서치를 이용한 검색 속도 개선
+
+<tr>
+<tr>
+
+  <summary>📊[이경훈] [Elasticsearch 성능 비교 결과 </summary>
+
+![Elasticsearch 성능 비교](https://github.com/user-attachments/assets/0ee0141b-38c5-4f6b-84be-54a31de92d47)
+
+
+| **검색 방법**                  | **설명**                         | **실행 속도 (ms)** |
+  |--------------------------------|--------------------------------|-------------------|
+| `getPopularKeywords()`         | 기본적인 검색어 집계            | **39ms**          |
+| `getPopularKeywordsOptimized()` | 실행 힌트 적용 (`Map` 방식)     | **33ms**          |
+| `getPopularKeywordsFastest()`   | 실행 힌트 + 쿼리 캐싱 적용      | **17ms**          |
+
+- **최적화 결과**
+    - 기본 검색 대비 **최대 2.3배 속도 향상**
+    - `executionHint(TermsAggregationExecutionHint.Map)` 적용 시 **15% 속도 개선**
+    - `requestCache(true)` 적용 후 **50% 추가 속도 개선**
+    - 캐싱된 검색어 데이터를 활용하면 **0.1초 이내** 응답 가능
+
+## 🚀 **AWS Elastic Beanstalk 배포**
+### 🌍 **Route 53을 이용한 도메인 설정**
+- AWS Route 53을 활용하여 맞춤형 도메인을 설정하고, 사용자가 쉽고 빠르게 접근할 수 있도록 구성
+
+### 🔒 **로드밸런서(Load Balancer) + HTTPS 적용**
+- AWS 로드밸런서를 활용하여 트래픽을 분산시키고, HTTPS 인증서를 적용하여 보안 강화
+- Elastic Load Balancing(ELB)와 ACM(AWS Certificate Manager)을 활용한 SSL/TLS 암호화 적용
+
+### 🛠 **EC2 + RDS를 활용한 안정적인 데이터베이스 관리**
+- AWS RDS를 사용하여 MySQL을 구성하고, EC2와의 연동을 통해 관리형 데이터베이스 운영 실습
+- Multi-AZ 배포를 고려하여 가용성과 안정성을 높이는 방법 적용
+- 자동 백업 및 스냅샷 기능을 활용하여 데이터 보호
+
+---
+
 ## 🔑 **Social Login OAuth2.0 (Google)**
 ### 🔗 **Google OAuth 2.0을 활용한 로그인 기능 구현**
 - Google OAuth 2.0을 활용하여 사용자가 쉽게 로그인할 수 있도록 지원
@@ -84,30 +290,6 @@
 분산 락이 가장 빠르며, 비관적 락은 상대적으로 느리다는 결과가 나왔습니다. 
 동시성 제어를 테스트하기 위해 1000개의 스레드가 동시에 100개의 쿠폰을 발급받는 상황을 시뮬레이션하였고, 그 결과:
 - **분산 락**이 가장 빠르게 동작했으며, **비관적 락**은 가장 느렸습니다.
-
-### 선착순 쿠폰 발급 서비스
-
-▶️ **데이터 정합성**:
-- **분산 락 = 비관적 락 > 낙관적 락**
-- 분산 락과 비관적 락은 항상 일관되게 100개의 쿠폰을 발급받음.
-- 낙관적 락은 100개 이상의 쿠폰을 발급받는 테스트에서 실패하는 경우가 더 많음.
-
-낙관적 락은 충돌이 자주 발생하는 환경에서는 적합하지 않다는 결론을 얻었습니다.
-
-비관적 락은 많은 스레드가 동시에 몰릴 경우 DB 부하가 높아질 수 있습니다.
-
-### 테스트 결과 분석
-
-선착순 쿠폰 100개를 발급받는 서비스와 같이 짧은 시간에 충돌이 많이 발생하는 경우, **Redis 분산 락**을 사용하는 것이 가장 적합하다는 판단을 내렸습니다. 
-
-#### 주요 결과:
-- **분산 락**과 **비관적 락**은 항상 일관되게 100개의 쿠폰을 발급하며, 데이터 정합성을 보장합니다.
-- **낙관적 락**은 락을 명확하게 설정하지 않고 버전 관리 방식(버전 어노테이션)을 사용하기 때문에, 동시 스레드 환경에서는 쿠폰 발급 수가 100개를 넘는 상황이 발생할 수 있습니다. 이로 인해 테스트에 실패하는 경우가 많았습니다.
-
-#### 결론:
-- **낙관적 락**은 충돌 발생이 잦은 환경에서는 적합하지 않으므로 사용을 피해야 합니다.
-- **Redis 분산 락**은 충돌이 많이 발생하는 환경에서 데이터 정합성을 보장하고, 응답 시간이 빠르므로 **선택하는 것이 가장 효율적**입니다.
-  
 
 ---
 ## 🔒 **트러블슈팅**
