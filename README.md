@@ -184,12 +184,10 @@
 
 ## 🔧 **성능 개선**
 
-### 2. 🚀 [최대현] **레디스 캐싱**: 데이터 캐싱을 통한 빠른 응답 처리
+### 1. 🚀 [최대현] **레디스 캐싱**: 데이터 캐싱을 통한 빠른 응답 처리
 
 <tr>
 <tr>
-
- <summary>📊 [최대현] 캐싱 적용 전 vs Redis Cache 적용 후 성능 비교 결과 </summary>
 
 **캐시 미적용**
 <img alt="스크린샷 2025-02-06 오후 5 07 38" src="https://github.com/user-attachments/assets/1869bf69-de9a-4c37-8ee8-62ef26ad23e7" />
@@ -206,12 +204,13 @@
 - **최적화 결과**
   - Redis Cache 적용 후 **평균 응답 속도 3초 211ms 향상** ㅇ
 
+<tr>
+<tr>
+  
 ### 2. 🔍 [이경훈] **Elasticsearch**: 엘라스틱 서치를 이용한 검색 속도 개선
 
 <tr>
 <tr>
-
-  <summary>📊[이경훈] [Elasticsearch 성능 비교 결과 </summary>
 
 ![Elasticsearch 성능 비교](https://github.com/user-attachments/assets/0ee0141b-38c5-4f6b-84be-54a31de92d47)
 
@@ -227,7 +226,10 @@
     - `executionHint(TermsAggregationExecutionHint.Map)` 적용 시 **15% 속도 개선**
     - `requestCache(true)` 적용 후 **50% 추가 속도 개선**
     - 캐싱된 검색어 데이터를 활용하면 **0.1초 이내** 응답 가능
- 
+
+ <tr>
+<tr>
+  
 ### 3. 🛣️ [최순우] **부하 분산**: AWS 로드밸런싱을 활용한 부하 분산
 
 ## 🚀 **AWS Elastic Beanstalk 배포**
@@ -243,6 +245,9 @@
 - Multi-AZ 배포를 고려하여 가용성과 안정성을 높이는 방법 적용
 - 자동 백업 및 스냅샷 기능을 활용하여 데이터 보호
 
+<tr>
+<tr>
+  
 ---
 
 ## 🔑 **Social Login OAuth2.0 (Google)**
